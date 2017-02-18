@@ -1101,7 +1101,14 @@ local function storeTransactionCallback(event)
         transaction.errorType=event.transaction.errorType
         transaction.errorString=event.transaction.errorString
         transaction.transactionIdentifier = event.transaction.identifier
-       
+
+    -- needed if  amazon receipt validation should be used
+    if ( targetStore == "amazon" ) then
+        transaction.userId = event.transaction.userId
+        transaction.subscriptionStartDate = event.transaction.subscriptionStartDate
+        transaction.subscriptionEndDate = event.transaction.subscriptionEndDate
+    end
+
     --If on the Google or Amazon store, and the last action from the user was to make a restore, and this
     --appears to be a purchase, then convert the event into a restore
     if ( ((targetStore=="amazon") or targetStore=="google")) and (actionType=="restore") and (transaction.state=="purchased") then
